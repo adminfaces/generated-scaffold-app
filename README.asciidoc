@@ -14,3 +14,6 @@ Just execute `bash build-and-run.sh` on the root of the project
 === Via Maven
 
 `mvn clean package` and then deploy generated war to `Wildfly 15` or newer. 
+
+== Tests
+run `mvn test -Pit-tests`
