@@ -1,0 +1,7 @@
+Room:
+  - id: -1 #avoid conflict with hibernate sequences
+    name: 8e669c57-6400-4e16-8
+    capacity: 42
+    version: 0
+
+

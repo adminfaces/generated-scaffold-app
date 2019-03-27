@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces" template="#{layoutMB.template}"> 
+    <ui:define name="title">
+         Talk #{msg['title.form']} 
+    </ui:define> 
+    <ui:define name="body"> 
+        <f:metadata> 
+            <f:viewParam name="id" value="#{talkFormMB.id}" converter="javax.faces.Long" /> 
+            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{talkFormMB.init()}"/>--> 
+            <f:event type="preRenderView" listener="#{talkFormMB.init}" /> 
+        </f:metadata> 
+        <adm:breadcrumb title="#{empty talkFormMB.id ? msg['label.new'].concat(' Talk') : 'Talk '.concat(talkFormMB.id)}" link="talk/talk-form.xhtml?id=#{talkFormMB.id}" /> 
+        <h:form id="form" prependId="false"> 
+            <p:focus context="@form" /> 
+            <p:panel styleClass="box-primary card"> 
+                <div id="main-buttons" class="hidden-sm hidden-xs"> 
+                    <p:commandButton value="#{msg['label.save']}" action="#{talkFormMB.save}" update="@form" icon="fa fa-check" styleClass="btn-primary" /> 
+                    <p:spacer width="5" rendered="#{talkFormMB.isNew()}" /> 
+                    <p:commandButton value="#{msg['label.clear']}" action="#{talkFormMB.clear}" process="@this" icon="fa fa-refresh" styleClass="btn-success" update="@form" rendered="#{talkFormMB.isNew()}" resetValues="true" /> 
+                    <p:spacer width="5" rendered="#{not talkFormMB.isNew()}" /> 
+                    <p:commandButton value="#{msg['label.delete']}" action="#{talkFormMB.remove}" process="@this" rendered="#{not talkFormMB.isNew()}" icon="fa fa-trash" styleClass="btn-danger"> 
+                        <f:setPropertyActionListener value="true" target="#{facesContext.externalContext.flash.keepMessages}" /> 
+                        <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger" /> 
+                    </p:commandButton> 
+                    <p:spacer width="5" /> 
+                    <p:commandButton value="#{msg['label.back']}" immediate="true" action="/talk/talk-list?faces-redirect=true" process="@this" icon="fa fa-reply" /> 
+                </div> 
+                <p:splitButton value="#{msg['label.save']}" action="#{talkFormMB.save}" update="@form" icon="fa fa-check" styleClass="hidden-md hidden-lg btn-primary"> 
+                    <p:menuitem value="#{msg['label.clear']}" action="#{talkFormMB.clear}" process="@this" update="@form" rendered="#{talkFormMB.isNew()}" resetValues="true" icon="fa fa-refresh" /> 
+                    <p:menuitem value="#{msg['label.delete']}" action="#{talkFormMB.remove}" process="@this" rendered="#{not talkFormMB.isNew()}" icon="fa fa-trash"> 
+                        <f:setPropertyActionListener value="true" target="#{facesContext.externalContext.flash.keepMessages}" /> 
+                        <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger" /> 
+                    </p:menuitem> 
+                    <p:separator /> 
+                    <p:menuitem value="#{msg['label.back']}" action="/talk/talk-list?faces-redirect=true" process="@this" immediate="true" icon="fa fa-reply" /> 
+                </p:splitButton> 
+                <hr /> 
+                <div class="ui-g ui-fluid"> 
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:outputLabel for="id" value="Id" /> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:inputText id="id" value="#{talkFormMB.entity.id}" readonly="true" styleClass="form-control ui-state-disabled" style="width: 100%" /> 
+                            <span class="help-block"> 
+                                <p:message for="id" /> </span> 
+                        </div> 
+                    </div> 
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:outputLabel for="title" value="Title" /> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:inputText id="title" value="#{talkFormMB.entity.title}" maxlength="100" required="true" requiredMessage="Title #{msg['label.is-required']}." /> 
+                            <span class="help-block"> 
+                                <p:message for="title" /> </span> 
+                        </div> 
+                    </div> 
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:outputLabel for="description" value="Description" /> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:inputTextarea id="description" value="#{talkFormMB.entity.description}" rows="3" cols="20" counter="descriptionDisplay" maxlength="2000" counterTemplate="{0} #{msg['label.remaining-chars']}" autoResize="true" /> 
+                            <span class="help-block"> 
+                                <h:outputText id="descriptionDisplay" /> 
+                                <p:message for="description" /> </span> 
+                        </div> 
+                    </div> 
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:outputLabel for="date" value="Date" /> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:datePicker id="date" value="#{talkFormMB.entity.date}" showOn="both" required="true" requiredMessage="Date #{msg['label.is-required']}." /> 
+                            <span class="help-block"> 
+                                <p:message for="date" /> </span> 
+                        </div> 
+                    </div> 
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:outputLabel for="speaker" value="Speaker" /> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:autoComplete id="speaker" value="#{talkFormMB.entity.speaker}" completeMethod="#{talkFormMB.completeSpeaker}" minQueryLength="2" dropdown="true" required="true" requiredMessage="Speaker #{msg['label.is-required']}." var="speaker" itemLabel="#{speaker.firstname}" itemValue="#{speaker}" converter="entityConverter" /> 
+                            <span class="help-block"> 
+                                <p:message for="speaker" /> </span> 
+                        </div> 
+                    </div> 
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:outputLabel for="room" value="Room" /> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:autoComplete id="room" value="#{talkFormMB.entity.room}" completeMethod="#{talkFormMB.completeRoom}" minQueryLength="2" dropdown="true" required="true" requiredMessage="Room #{msg['label.is-required']}." var="room" itemLabel="#{room.name}" itemValue="#{room}" converter="entityConverter" /> 
+                            <span class="help-block"> 
+                                <p:message for="room" /> </span> 
+                        </div> 
+                    </div> 
+                    <h:panelGroup id="footer" layout="block" styleClass="hidden-sm hidden-md hidden-lg"> 
+                        <hr /> 
+                        <p:splitButton value="#{msg['label.save']}" action="#{talkFormMB.save}" update="@form" icon="fa fa-check" styleClass="hidden-md hidden-lg btn-primary"> 
+                            <p:menuitem value="#{msg['label.clear']}" action="#{talkFormMB.clear}" process="@this" update="@form" rendered="#{talkFormMB.isNew()}" resetValues="true" icon="fa fa-refresh" /> 
+                            <p:menuitem value="#{msg['label.delete']}" action="#{talkFormMB.remove}" process="@this" rendered="#{not talkFormMB.isNew()}" icon="fa fa-trash"> 
+                                <f:setPropertyActionListener value="true" target="#{facesContext.externalContext.flash.keepMessages}" /> 
+                                <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger" /> 
+                            </p:menuitem> 
+                            <p:separator /> 
+                            <p:menuitem value="#{msg['label.back']}" action="/talk/talk-list?faces-redirect=true" process="@this" immediate="true" icon="fa fa-reply" /> 
+                        </p:splitButton> 
+                    </h:panelGroup> 
+                </div>
+            </p:panel> 
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid"> 
+                <p:commandButton value="#{msg['label.yes']}" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes" icon="fa fa-check" /> 
+                <p:commandButton value="#{msg['label.no']}" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no" icon="fa fa-close" /> 
+            </p:confirmDialog> 
+        </h:form> 
+    </ui:define> 
+</ui:composition>

@@ -1,0 +1,36 @@
+!!com.github.adminfaces.addon.scaffold.model.EntityConfig
+datatableEditable: false
+datatableReflow: true
+displayField: name
+fields:
+- hidden: false
+  length: 100
+  name: id
+  required: true
+  type: INPUT_NUMBER
+- hidden: false
+  length: 100
+  name: version
+  required: false
+  type: INPUT_NUMBER
+- hidden: false
+  length: 20
+  name: name
+  required: true
+  type: INPUT_TEXT
+- hidden: false
+  length: 100
+  name: capacity
+  required: true
+  type: INPUT_NUMBER
+- hidden: false
+  length: 100
+  name: hasWifi
+  required: false
+  type: TOGGLE_SWITCH
+- hidden: false
+  length: 100
+  name: talks
+  required: false
+  type: CHECKBOXMENU
+menuIcon: fa fa-circle-o

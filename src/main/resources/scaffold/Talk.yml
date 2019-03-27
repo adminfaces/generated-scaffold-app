@@ -1,0 +1,41 @@
+!!com.github.adminfaces.addon.scaffold.model.EntityConfig
+datatableEditable: false
+datatableReflow: true
+displayField: title
+fields:
+- hidden: false
+  length: 100
+  name: id
+  required: true
+  type: INPUT_NUMBER
+- hidden: false
+  length: 100
+  name: version
+  required: false
+  type: INPUT_NUMBER
+- hidden: false
+  length: 100
+  name: title
+  required: true
+  type: INPUT_TEXT
+- hidden: false
+  length: 2000
+  name: description
+  required: false
+  type: TEXT_AREA
+- hidden: false
+  length: 100
+  name: date
+  required: true
+  type: DATEPICKER
+- hidden: false
+  length: 100
+  name: speaker
+  required: true
+  type: AUTOCOMPLETE
+- hidden: false
+  length: 100
+  name: room
+  required: true
+  type: AUTOCOMPLETE
+menuIcon: fa fa-circle-o

@@ -1,0 +1,16 @@
+= AdminFaces Scaffolded application
+:  
+
+This application was generated with AdminFaces scaffold. The forge commands executed to generate the application can be found https://github.com/adminfaces/admin-addon#generated-application[found here^].
+
+
+== Running
+
+
+=== Via Docker
+
+Just execute `bash build-and-run.sh` on the root of the project 
+
+=== Via Maven
+
+`mvn clean package` and then deploy generated war to `Wildfly 15` or newer. 

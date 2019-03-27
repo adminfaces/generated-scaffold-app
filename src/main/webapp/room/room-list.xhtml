@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces" template="#{layoutMB.template}"> 
+    <ui:define name="metadata"> 
+        <ui:param name="title" value="Rooms" /> 
+        <!-- Automatic create breadCrumb and page title when ui:param 'title' is provided. --> 
+    </ui:define> 
+    <ui:define name="description">
+         Room #{msg['title.listing']} 
+    </ui:define> 
+    <ui:define name="body"> 
+        <h:form> 
+            <p:focus context="@form" /> 
+            <div class="box box-primary"> 
+                <div class="box-header with-border"> 
+                    <div id="main-buttons" class="hidden-sm hidden-xs"> 
+                        <p:commandButton action="room-form?faces-redirect=true" icon="fa fa-plus" value="#{msg['label.new']}" styleClass="btn-primary" /> 
+                        <p:spacer width="5" /> 
+                        <p:commandButton value="#{msg['label.delete-selected']}" icon="fa fa-trash" styleClass="btn-danger" action="#{roomListMB.delete}" disabled="#{empty roomListMB.selectionList or roomListMB.selectionList.size() == 0}" process="@this" update="@form"> 
+                            <p:confirm header="Confirmation" message="#{msg['label.confirm']}" icon="ui-icon-danger" /> 
+                        </p:commandButton> 
+                        <p:spacer width="5" /> 
+                        <p:commandButton value="#{msg['label.search']}" update="@(.ui-dialog)" styleClass="btn-info" oncomplete="PF('searchDialog').show()" icon="fa fa-search" process="@none" ignoreAutoUpdate="true" /> 
+                        <p:spacer width="5" /> 
+                        <p:commandButton value="#{msg['label.clear']}" update="@(.ui-dialog, .ui-datatable)" process="@form" action="#{roomListMB.clear}" onclick="PF('roomsTable').clearFilters()" icon="fa fa-refresh" /> 
+                    </div> 
+                    <p:splitButton value="#{msg['label.new']}" action="room-form?faces-redirect=true" icon="fa fa-plus" styleClass="hidden-md hidden-lg btn-primary"> 
+                        <p:menuitem value="#{msg['label.delete-selected']}" action="#{roomListMB.delete}" process="@this" update="@form" disabled="#{empty roomListMB.selectionList or roomListMB.selectionList.size() == 0}" icon="fa fa-trash"> 
+                            <p:confirm header="#{msg['label.confirm']}" message="Are you sure?" icon="ui-icon-danger" /> 
+                        </p:menuitem> 
+                        <p:menuitem value="#{msg['label.search']}" update="@(.ui-dialog)" oncomplete="PF('searchDialog').show()" process="@none" ignoreAutoUpdate="true" icon="fa fa-search" /> 
+                        <p:menuitem value="#{msg['label.clear']}" update="@(.ui-dialog, .ui-datatable)" process="@form" action="#{roomListMB.clear}" onclick="PF('roomsTable').clearFilters()" icon="fa fa-refresh" /> 
+                    </p:splitButton> 
+                    <p:separator /> 
+                    <p:dataTable widgetVar="roomsTable" var="row" value="#{roomListMB.list}" rows="10" rowKey="#{row.id}" lazy="true" paginator="true" sortBy="#{row.id}" reflow="true" filteredValue="#{roomListMB.filteredValue}" styleClass="no-border" emptyMessage="#{msg['label.empty-list']}" paginatorPosition="bottom" selection="#{roomListMB.selectionList}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {JumpToPageDropdown}" currentPageReportTemplate="[ {startRecord} to {endRecord} of {totalRecords} ]" rowsPerPageTemplate="5,10,15,20,30"> 
+                        <p:ajax event="rowSelectCheckbox" update="@(.ui-button, .ui-confirm-dialog)" /> 
+                        <p:ajax event="rowUnselectCheckbox" update="@(.ui-button, .ui-confirm-dialog)" /> 
+                        <p:ajax event="rowSelect" update="@(.ui-button, .ui-confirm-dialog)" /> 
+                        <p:ajax event="rowUnselect" update="@(.ui-button, .ui-confirm-dialog)" /> 
+                        <p:column selectionMode="multiple" width="5%" styleClass="align-center" /> 
+                        <p:column headerText="Id" filterBy="#{row.id}" sortBy="#{row.id}"> 
+                            <p:link value="##{row.id}" outcome="/room/room-form.xhtml" style="font-weight:bold;text-decoration:underline"> 
+                                <f:param name="id" value="#{row.id}"></f:param> 
+                            </p:link> 
+                        </p:column> 
+                        <p:column headerText="Name" sortBy="#{row.name}" priority="2">
+                             #{row.name} 
+                        </p:column> 
+                        <p:column headerText="Capacity" sortBy="#{row.capacity}" priority="2">
+                             #{row.capacity} 
+                        </p:column> 
+                        <p:column headerText="HasWifi" sortBy="#{row.hasWifi}" priority="3">
+                             #{row.hasWifi} 
+                        </p:column> 
+                        <p:column headerText="Talks" priority="3"> 
+                            <h:panelGroup rendered="#{not roomListMB.showTalksDetailMap[row.id]}" style="text-align: center"> 
+                                <p:commandLink value="#{msg['label.view']} talks" action="#{roomListMB.showTalksDetail(row.id)}" process="@this" update="@(.ui-datatable)" style="text-decoration:underline" /> 
+                            </h:panelGroup> 
+                            <p:dataList rendered="#{roomListMB.showTalksDetailMap[row.id]}" emptyMessage="#{msg['label.empty-list']}" value="#{roomListMB.roomTalks}" var="d" styleClass="no-border" paginator="#{(not empty roomListMB.roomTalks and roomListMB.roomTalks.size() > 5) ? 'true':'false' }"> 
+                                <p:link value="#{d.title}" outcome="/talk/talk-form.xhtml"> 
+                                    <f:param name="id" value="#{d.id}"></f:param> 
+                                </p:link> 
+                            </p:dataList> 
+                        </p:column> 
+                        <f:facet name="footer"> 
+                            <div id="footer">
+                                 #{msg['label.search-criteria']} 
+                                <i class="fa fa-filter"></i> 
+                            </div> 
+                        </f:facet> 
+                    </p:dataTable> 
+                </div> 
+            </div> 
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-solid box-danger"> 
+                <p:commandButton value="#{msg['label.yes']}" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes" icon="fa fa-check" /> 
+                <p:commandButton value="#{msg['label.no']}" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no" icon="fa fa-close" /> 
+            </p:confirmDialog> 
+        </h:form> 
+        <p:dialog header="#{msg['label.search']} rooms" widgetVar="searchDialog" modal="true" appendTo="@(body)" width="500" responsive="true" draggable="false" styleClass="box-primary"> 
+            <h:form> 
+                <f:validateBean disabled="true"> 
+                    <p:commandButton value="#{msg['label.ok']}" update="@form @(.ui-datatable, .ui-tooltip)" icon="fa fa-check" styleClass="btn-primary" /> 
+                    <p:spacer height="5" /> 
+                    <p:commandButton value="#{msg['label.clear']}" action="#{roomListMB.clear}" process="@this" update="@form @(.ui-datatable, .ui-tooltip)" styleClass="btn-success" onclick="PF('roomsTable').clearFilters()" icon="fa fa-refresh" /> 
+                    <p:spacer height="5" /> 
+                    <p:commandButton value="#{msg['label.close']}" icon="fa fa-close" process="@none" ignoreAutoUpdate="true" oncomplete="PF('searchDialog').hide()" /> 
+                    <p:separator /> 
+                    <div class="ui-g ui-fluid"> 
+                        <div class="ui-g-12"> 
+                            <p:outputLabel for="name" value="Name" /> 
+                        </div> 
+                        <div class="ui-g-12"> 
+                            <p:inputText id="name" value="#{roomListMB.filter.entity.name}" /> 
+                        </div> 
+                        <div class="ui-g-12"> 
+                            <p:outputLabel for="capacity" value="Capacity" /> 
+                        </div> 
+                        <div class="ui-g-12"> 
+                            <p:inputNumber id="capacity" value="#{roomListMB.filter.entity.capacity}" decimalPlaces="0" thousandSeparator="" decimalSeparator="" /> 
+                        </div> 
+                        <div class="ui-g-12"> 
+                            <p:outputLabel for="hasWifi" value="HasWifi" /> 
+                        </div> 
+                        <div class="ui-g-12"> 
+                            <p:toggleSwitch id="hasWifi" value="#{roomListMB.filter.entity.hasWifi}" /> 
+                        </div> 
+                        <div class="ui-g-12"> 
+                            <p:outputLabel for="talks" value="Talks" /> 
+                        </div> 
+                        <div class="ui-g-12"> 
+                            <p:selectCheckboxMenu id="talks" value="#{roomListMB.filter.entity.talks}" label="Talks" multiple="true" filter="true" filterMatchMode="contains" converter="entityConverter"> 
+                                <f:attribute name="collectionType" value="java.util.HashSet" /> 
+                                <f:selectItems value="#{allTalks}" var="item" itemLabel="#{item.title}" itemValue="#{item}" /> 
+                            </p:selectCheckboxMenu> 
+                        </div> 
+                    </div> 
+                </f:validateBean> 
+            </h:form> 
+        </p:dialog> 
+        <p:outputPanel> 
+            <p:autoUpdate /> 
+            <p:tooltip for="@(div[id$=footer])" escape="false" position="top" showEvent="mouseover" hideEvent="mouseleave" value="#{roomListMB.searchCriteria}" /> 
+        </p:outputPanel> 
+    </ui:define> 
+</ui:composition>

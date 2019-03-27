@@ -1,0 +1,22 @@
+Talk:
+  - id: -1 #avoid conflict with hibernate sequences
+    title: 6e9cd298-c
+    date: 2019-27-03
+    version: 0
+    speaker_id: -1
+    room_id: -1
+
+Speaker:
+  - id: -1
+    version: 0
+    firstname: 477b72a8-1
+    surname: c3d60fcb-1
+    street: e82362af-a905-4632-8d53-92e095b0a54b
+    city: c4a76f05-685f-460b-9a68-345fd4a1d6f6
+    zipcode: -1149253251
+Room:
+  - id: -1
+    version: 0
+    name: 6152e894-2fc2-4714-b
+    capacity: 42
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html"> 
+    <ul class="sidebar-menu" data-widget="tree"> 
+        <li> 
+            <p:link href="/index.xhtml" onclick="clearBreadCrumbs()"> 
+                <i class="fa fa-home"></i> 
+                <span>Home</span> 
+            </p:link> </li> 
+        <li class="header"> General </li> 
+        <li> 
+            <p:link id="menuRoom" outcome="/room/room-list.xhtml" title="Rooms page"> 
+                <i class="fa fa-circle-o"></i> 
+                <span>Rooms</span> 
+            </p:link> </li> 
+        <li> 
+            <p:link id="menuSpeaker" outcome="/speaker/speaker-list.xhtml" title="Speakers page"> 
+                <i class="fa fa-circle-o"></i> 
+                <span>Speakers</span> 
+            </p:link> </li> 
+        <li> 
+            <p:link id="menuTalk" outcome="/talk/talk-list.xhtml" title="Talks page"> 
+                <i class="fa fa-circle-o"></i> 
+                <span>Talks</span> 
+            </p:link> </li> 
+    </ul> 
+</ui:composition>

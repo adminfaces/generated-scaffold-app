@@ -1,0 +1,10 @@
+Speaker:
+  - id: -1 #avoid conflict with hibernate sequences
+    firstname: eca88dfc-1
+    surname: 21a2ee06-8
+    version: 0
+    street: ef5323ce-d18e-4d37-9f6f-2fb228a79eb8     
+    city: db82268e-dcea-42c9-932c-b75e24658bfb     
+    zipcode: -1100124915     
+
+

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui" xmlns:adm="http://github.com/adminfaces" template="#{layoutMB.template}"> 
+    <ui:define name="title">
+         Speaker #{msg['title.form']} 
+    </ui:define> 
+    <ui:define name="body"> 
+        <f:metadata> 
+            <f:viewParam name="id" value="#{speakerFormMB.id}" converter="javax.faces.Long" /> 
+            <!-- use view action if you are in a Java EE 7 server: <f:viewAction action="#{speakerFormMB.init()}"/>--> 
+            <f:event type="preRenderView" listener="#{speakerFormMB.init}" /> 
+        </f:metadata> 
+        <adm:breadcrumb title="#{empty speakerFormMB.id ? msg['label.new'].concat(' Speaker') : 'Speaker '.concat(speakerFormMB.id)}" link="speaker/speaker-form.xhtml?id=#{speakerFormMB.id}" /> 
+        <h:form id="form" prependId="false"> 
+            <p:focus context="@form" /> 
+            <p:panel styleClass="box-primary card"> 
+                <div id="main-buttons" class="hidden-sm hidden-xs"> 
+                    <p:commandButton value="#{msg['label.save']}" action="#{speakerFormMB.save}" update="@form" icon="fa fa-check" styleClass="btn-primary" /> 
+                    <p:spacer width="5" rendered="#{speakerFormMB.isNew()}" /> 
+                    <p:commandButton value="#{msg['label.clear']}" action="#{speakerFormMB.clear}" process="@this" icon="fa fa-refresh" styleClass="btn-success" update="@form" rendered="#{speakerFormMB.isNew()}" resetValues="true" /> 
+                    <p:spacer width="5" rendered="#{not speakerFormMB.isNew()}" /> 
+                    <p:commandButton value="#{msg['label.delete']}" action="#{speakerFormMB.remove}" process="@this" rendered="#{not speakerFormMB.isNew()}" icon="fa fa-trash" styleClass="btn-danger"> 
+                        <f:setPropertyActionListener value="true" target="#{facesContext.externalContext.flash.keepMessages}" /> 
+                        <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger" /> 
+                    </p:commandButton> 
+                    <p:spacer width="5" /> 
+                    <p:commandButton value="#{msg['label.back']}" immediate="true" action="/speaker/speaker-list?faces-redirect=true" process="@this" icon="fa fa-reply" /> 
+                </div> 
+                <p:splitButton value="#{msg['label.save']}" action="#{speakerFormMB.save}" update="@form" icon="fa fa-check" styleClass="hidden-md hidden-lg btn-primary"> 
+                    <p:menuitem value="#{msg['label.clear']}" action="#{speakerFormMB.clear}" process="@this" update="@form" rendered="#{speakerFormMB.isNew()}" resetValues="true" icon="fa fa-refresh" /> 
+                    <p:menuitem value="#{msg['label.delete']}" action="#{speakerFormMB.remove}" process="@this" rendered="#{not speakerFormMB.isNew()}" icon="fa fa-trash"> 
+                        <f:setPropertyActionListener value="true" target="#{facesContext.externalContext.flash.keepMessages}" /> 
+                        <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger" /> 
+                    </p:menuitem> 
+                    <p:separator /> 
+                    <p:menuitem value="#{msg['label.back']}" action="/speaker/speaker-list?faces-redirect=true" process="@this" immediate="true" icon="fa fa-reply" /> 
+                </p:splitButton> 
+                <hr /> 
+                <div class="ui-g ui-fluid"> 
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:outputLabel for="id" value="Id" /> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:inputText id="id" value="#{speakerFormMB.entity.id}" readonly="true" styleClass="form-control ui-state-disabled" style="width: 100%" /> 
+                            <span class="help-block"> 
+                                <p:message for="id" /> </span> 
+                        </div> 
+                    </div> 
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:outputLabel for="firstname" value="Firstname" /> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:inputText id="firstname" value="#{speakerFormMB.entity.firstname}" maxlength="100" required="true" requiredMessage="Firstname #{msg['label.is-required']}." /> 
+                            <span class="help-block"> 
+                                <p:message for="firstname" /> </span> 
+                        </div> 
+                    </div> 
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:outputLabel for="surname" value="Surname" /> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:inputText id="surname" value="#{speakerFormMB.entity.surname}" maxlength="100" required="true" requiredMessage="Surname #{msg['label.is-required']}." /> 
+                            <span class="help-block"> 
+                                <p:message for="surname" /> </span> 
+                        </div> 
+                    </div> 
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:outputLabel for="bio" value="Bio" /> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:inputTextarea id="bio" value="#{speakerFormMB.entity.bio}" rows="3" cols="20" counter="bioDisplay" maxlength="2000" counterTemplate="{0} #{msg['label.remaining-chars']}" autoResize="true" /> 
+                            <span class="help-block"> 
+                                <h:outputText id="bioDisplay" /> 
+                                <p:message for="bio" /> </span> 
+                        </div> 
+                    </div> 
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:outputLabel for="twitter" value="Twitter" /> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:inputText id="twitter" value="#{speakerFormMB.entity.twitter}" maxlength="100" /> 
+                            <span class="help-block"> 
+                                <p:message for="twitter" /> </span> 
+                        </div> 
+                    </div> 
+                    <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:outputLabel for="talks" value="Talks" /> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-11"> 
+                            <p:dataList id="talks" value="#{speakerFormMB.entity.talks}" var="d" paginator="#{(not empty speakerFormMB.entity.talks and speakerFormMB.entity.talks.size() > 5) ? 'true':'false' }" paginatorPosition="bottom" emptyMessage="#{msg['label.empty-list']}"> 
+                                <p:link value="#{d.title}" outcome="/talk/talk-form.xhtml"> 
+                                    <f:param name="id" value="#{d.id}"></f:param> 
+                                </p:link> 
+                            </p:dataList> 
+                            <span class="help-block"> 
+                                <p:message for="talks" /> </span> 
+                        </div> 
+                    </div> 
+                    <p:separator style="width:100%" /> 
+                    <p:panel header="Address" styleClass="card no-border ui-g-12"> 
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                            <div class="ui-sm-12 ui-g-11"> 
+                                <p:outputLabel for="street" value="Street" /> 
+                            </div> 
+                            <div class="ui-sm-12 ui-g-11"> 
+                                <p:inputText id="street" value="#{speakerFormMB.entity.address.street}" maxlength="50" required="true" requiredMessage="Street #{msg['label.is-required']}." /> 
+                                <span class="help-block"> 
+                                    <p:message for="street" /> </span> 
+                            </div> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                            <div class="ui-sm-12 ui-g-11"> 
+                                <p:outputLabel for="city" value="City" /> 
+                            </div> 
+                            <div class="ui-sm-12 ui-g-11"> 
+                                <p:inputText id="city" value="#{speakerFormMB.entity.address.city}" maxlength="50" required="true" requiredMessage="City #{msg['label.is-required']}." /> 
+                                <span class="help-block"> 
+                                    <p:message for="city" /> </span> 
+                            </div> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                            <div class="ui-sm-12 ui-g-11"> 
+                                <p:outputLabel for="zipcode" value="Zipcode" /> 
+                            </div> 
+                            <div class="ui-sm-12 ui-g-11"> 
+                                <p:inputNumber id="zipcode" value="#{speakerFormMB.entity.address.zipcode}" decimalPlaces="0" thousandSeparator="" decimalSeparator="" maxlength="10" required="true" requiredMessage="Zipcode #{msg['label.is-required']}." /> 
+                                <span class="help-block"> 
+                                    <p:message for="zipcode" /> </span> 
+                            </div> 
+                        </div> 
+                        <div class="ui-sm-12 ui-g-6 ui-g-nopad"> 
+                            <div class="ui-sm-12 ui-g-11"> 
+                                <p:outputLabel for="state" value="State" /> 
+                            </div> 
+                            <div class="ui-sm-12 ui-g-11"> 
+                                <p:inputText id="state" value="#{speakerFormMB.entity.address.state}" maxlength="100" /> 
+                                <span class="help-block"> 
+                                    <p:message for="state" /> </span> 
+                            </div> 
+                        </div> 
+                    </p:panel> 
+                    <h:panelGroup id="footer" layout="block" styleClass="hidden-sm hidden-md hidden-lg"> 
+                        <hr /> 
+                        <p:splitButton value="#{msg['label.save']}" action="#{speakerFormMB.save}" update="@form" icon="fa fa-check" styleClass="hidden-md hidden-lg btn-primary"> 
+                            <p:menuitem value="#{msg['label.clear']}" action="#{speakerFormMB.clear}" process="@this" update="@form" rendered="#{speakerFormMB.isNew()}" resetValues="true" icon="fa fa-refresh" /> 
+                            <p:menuitem value="#{msg['label.delete']}" action="#{speakerFormMB.remove}" process="@this" rendered="#{not speakerFormMB.isNew()}" icon="fa fa-trash"> 
+                                <f:setPropertyActionListener value="true" target="#{facesContext.externalContext.flash.keepMessages}" /> 
+                                <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-danger" /> 
+                            </p:menuitem> 
+                            <p:separator /> 
+                            <p:menuitem value="#{msg['label.back']}" action="/speaker/speaker-list?faces-redirect=true" process="@this" immediate="true" icon="fa fa-reply" /> 
+                        </p:splitButton> 
+                    </h:panelGroup> 
+                </div>
+            </p:panel> 
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" styleClass="box-danger box-solid"> 
+                <p:commandButton value="#{msg['label.yes']}" type="button" styleClass="btn-material btn-primary ui-confirmdialog-yes" icon="fa fa-check" /> 
+                <p:commandButton value="#{msg['label.no']}" type="button" styleClass="btn-material btn-danger ui-confirmdialog-no" icon="fa fa-close" /> 
+            </p:confirmDialog> 
+        </h:form> 
+    </ui:define> 
+</ui:composition>
