@@ -1,5 +1,6 @@
 = AdminFaces Scaffolded application
-:  
+
+image:https://travis-ci.org/adminfaces/generated-scaffold-app.svg[Build Status (Travis CI), link=https://travis-ci.org/adminfaces/generated-scaffold-app]
 
 This application was generated with AdminFaces scaffold. The forge commands executed to generate the application can be found https://github.com/adminfaces/admin-addon#generated-application[found here^].
 
